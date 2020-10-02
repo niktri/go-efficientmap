@@ -1,11 +1,13 @@
 # go-efficientmap
-Threadsafe golang Map - Efficient safe read-write map than `sync.Map` or `atomic.Value` CopyOnWrite Map
+Threadsafe golang Map - Efficient safe read-write map than `sync.Map` or `atomic.Value` CopyOnWrite Map.
+
 See Implementation: https://github.com/niktri/go-efficientmap/blob/main/efficient_test.go
 
 # What is Efficient Map ?
 
 **EfficientMap** is a threadsafe CopyOnWrite map, allowing safe reads & writes concurrently. 
-Exploiting the fact that golang assignments are atomic. Cool down! Yes they are not officially, but read on...
+
+We exploit the fact that golang assignments are atomic. Cool down! Yes they are not officially, but read on...
 
 # Usecase 
 
@@ -73,12 +75,13 @@ Exploiting the fact that golang assignments are atomic. Cool down! Yes they are 
     }
 ```
 # Are golang assignments atomic ?
-- Go language spec does not guarantee any assignments to be atomic. But..
+- Go memory model does not guarantee any assignments to be atomic. But..
 - [Here](https://research.swtch.com/gorace) Russ Cox happens to know a var assignment to be atomic.
 - As of go1.15 it seems(to me) that int family, map & pointers assignments are atomic. This may not be true for int64 on 32 or 16 bit systems. 
   `-race` would ofcourse complain this. So far never found any concurrency panics or wrong values. Please let me know if you find one.
 - Interface, string, slices, structs are of course not atomic.
 - This may change in future and it is dangerous to rely on this atomicity.
+- As per the [go memory model](https://golang.org/ref/mem), *becoming too clever* isn't a good idea.
 
 # Result
 ```
